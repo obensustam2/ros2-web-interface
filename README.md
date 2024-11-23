@@ -1,4 +1,4 @@
-# vue-cli2
+# ros2_web_interface
 
 ## Project setup
 ```
@@ -20,4 +20,7 @@ node action_client.js
 ```
 add AppRosWorld on main.js
 node ros_world.js
+ros2 topic echo /my_topic
+ros2 run action_tutorials_cpp fibonacci_action_server
+python3 service_server.py 
 ```
