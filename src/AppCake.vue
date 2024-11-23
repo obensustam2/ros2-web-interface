@@ -19,9 +19,9 @@
 
 <script>
   // import yummy_cakes from './components/yummy_cakes.vue';
-  import header from './views/web_header.vue';
-  import content from './views/web_content.vue';
-  import footer from './views/web_footer.vue';
+  import header from './views/WebHeader.vue';
+  import content from './views/WebContent.vue';
+  import footer from './views/WebFooter.vue';
   
   export default 
   {

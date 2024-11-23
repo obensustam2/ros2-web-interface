@@ -6,7 +6,7 @@
 
 <script>
 
-    import yummy_cakes from '@/components/yummy_cakes.vue';
+    import yummy_cakes from '@/components/CakeContent.vue';
 
     export default {
         components: {
