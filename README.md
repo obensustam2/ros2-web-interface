@@ -1,26 +1,25 @@
-# ros2_web_interface
+# ROS2 Web Interface
 
 ## Project setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## Project launch 
 ```
+cd ros2-web-interface/
 npm run serve
-```
-
-### Single ROS2 Action Client
-```
-add AppActionClient on main.js
-node action_client.js
-```
-
-### ROS2 Publisher, Service Request, Action Client
-```
-add AppRosWorld on main.js
-node ros_world.js
+node src/ros_world.js
 ros2 topic echo /my_topic
 ros2 run action_tutorials_cpp fibonacci_action_server
-python3 service_server.py 
+python3 src/scripts/service_server.py
+python3 src/scripts/get_param.py
+ws
+ros2 launch fanuc_bringup fanuc_bringup.launch.py
 ```
+
+## ToDo
+- Disconnect from ROS should not cause ros_world.js to give error
+- rcl_log message visualization on UI
+- Sending action goal
+- Sending service non-empty request
