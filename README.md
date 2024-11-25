@@ -2,6 +2,7 @@
 
 ## Project setup
 ```
+cd ros2-web-interface/
 npm install
 ```
 
@@ -19,7 +20,5 @@ ros2 launch fanuc_bringup fanuc_bringup.launch.py
 ```
 
 ## ToDo
-- Disconnect from ROS should not cause ros_world.js to give error
-- rcl_log message visualization on UI
-- Sending action goal
-- Sending service non-empty request
+- Sending custom action goal
+

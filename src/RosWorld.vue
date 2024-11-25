@@ -3,27 +3,23 @@
     <h1>ROS 2 Web Interface</h1>
 
     <!-- ROS Connection Status Section -->
-    <!-- ROS Connection Status Section -->
     <div class="section">
       <h2>ROS Connection Status</h2>
       <p v-if="rosStatus !== null">
         ROS Connection: <strong>{{ rosStatus ? 'Connected' : 'Disconnected' }}</strong>
       </p>
       <div class="button-container">
-        <button @click="connectRos" class="blue-button">Connect ROS</button>
+        <!-- <button @click="connectRos" class="blue-button">Connect ROS</button> -->
         <button @click="disconnectRos" class="blue-button">Disconnect ROS</button>
       </div>
     </div>
 
+
     <div class="section">
       <h2>Received Joint States</h2>
       <div v-if="jointStates.length > 0">
-        <!-- <p><strong>Topic:</strong> {{ jointStates[0].topicName }}</p>
-        <p><strong>Message Type:</strong> {{ jointStates[0].messageType }}</p> -->
         <p><strong>Joint Names:</strong> {{ jointStates[0].message.name }}</p>
         <p><strong>Positions:</strong> {{ jointStates[0].message.position }}</p>
-        <!-- <p><strong>Velocities:</strong> {{ jointStates[0].message.velocity }}</p>
-        <p><strong>Efforts:</strong> {{ jointStates[0].message.effort }}</p> -->
       </div>
       <div v-else>
         <p>No joint states received yet.</p>
@@ -31,16 +27,8 @@
     </div>
 
 
-    <div class="section">
-      <h2>Latest Log Messages</h2>
-      <div v-for="message in rosoutMessages" :key="message.message.level" class="message">
-        <p><strong>{{ formatLevel(message.message.level) }}:</strong> {{ message.message.msg }}</p>
-      </div>
-    </div>
-
     <!-- Other Sections -->
     <div class="sections-row">
-
       <!-- Set Parameter Section -->
       <div class="section">
         <h2>Send Parameter Update</h2>
@@ -78,9 +66,22 @@
         <button @click="sendActionGoal" class="blue-button">Send Action Goal</button>
       </div>
     </div>
-
   </div>
 
+
+    <div class="section">
+      <h2>Received Log Messages</h2>
+      <div v-if="rosoutMessages.length > 0" class="log-container">
+        <ul>
+          <li v-for="(rosoutMessage) in rosoutMessages" :key="rosoutMessage.id" class="log-item">
+            <p>Log Message: {{ rosoutMessage.message.msg }}, Message Severity: {{ rosoutMessage.message.level }}</p>
+          </li>
+        </ul>
+      </div>
+      <div v-else>
+        <p>No log messages received yet.</p>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -90,7 +91,6 @@ export default {
       jointStates: [], // Array to store received joint states
       rosoutMessages: [],
       rosStatus: null,
-      isRosStatusPressed: false,
       parameter: {
         TargetNodeName: 'fanuc_gripper_multi_group',
         ParameterName: 'max_velocity_scaling_factor',
@@ -133,6 +133,24 @@ export default {
 
         // Replace the jointStates array with the latest message
         this.jointStates = [{id: Date.now(), ...data,}]; // Unique ID for each message
+        //   id: 1698274839000, // Example timestamp
+        //   name: value0,
+        //   position: value1,    // Properties from the `data` object
+        //   velocity: value2,
+        //   ...
+      }
+    
+      // Only handle messages from /rosout
+      if (data.topicName === '/rosout') {
+        console.log('Received /rosout message:', data);
+
+        // Add the new message to the top of the list
+        this.rosoutMessages.unshift({ id: Date.now(), ...data });
+
+        // Limit the list to the last 50 messages
+        if (this.rosoutMessages.length > 50) {
+          this.rosoutMessages.pop();
+        }
       }
     };
 
@@ -142,6 +160,10 @@ export default {
 
     socket.onclose = () => {
       console.log('WebSocket disconnected.');
+    };
+
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
     };
 
     this.socket = socket; // Store the socket reference for future use
@@ -271,6 +293,20 @@ export default {
 </script>
 
 <style scoped>
+  .section {
+    margin: 20px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
   .sections-row {
     display: flex;
     justify-content: space-between;  /* Distribute space evenly */
@@ -301,16 +337,19 @@ export default {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #007BFF;
+    background-color: #449da0;
     color: white;
     cursor: pointer;
   }
 
   button:hover {
-    background-color: #0056b3;
+    background-color: #679c9e;
   }
 
-
+  button.pressed {
+    background-color: #666;
+  }
+  
   h2 {
     background-color: lightcoral;
     color: white;
@@ -329,28 +368,6 @@ export default {
     justify-content: center; /* Optional: Center align buttons horizontally */
   }
 
-  .blue-button {
-    padding: 10px 20px;
-    background-color: #799fc8;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .blue-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-  }
-
-
-  .blue-button:active {
-    background-color: #555;
-  }
-
-  button.pressed {
-    background-color: #666;
-  }
-
   p {
     font-size: 18px;
     margin: 10px 0;
@@ -361,5 +378,33 @@ export default {
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+  }
+
+  .section {
+  margin: 20px;
+  }
+
+  .log-container {
+    max-height: 300px; /* Limit the height of the container */
+    overflow-y: auto; /* Add vertical scrolling */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+
+  .log-item {
+    margin-bottom: 2px;
+    padding: 1px;
+    /* border-bottom: 1px solid #ddd; */
+  }
+
+  .log-item p {
+    margin: 5px 0;
+    word-wrap: break-word;
+  }
+
+  .log-item:last-child {
+    border-bottom: none; /* Remove the border for the last item */
   }
 </style>
