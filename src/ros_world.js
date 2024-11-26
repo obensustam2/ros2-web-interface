@@ -16,7 +16,7 @@ let rosNode; // Global ROS 2 node reference
 
 startRosConnection();
 
-const Fibonacci = rclnodejs.require('action_tutorials_interfaces/action/Fibonacci');
+// const Fibonacci = rclnodejs.require('action_tutorials_interfaces/action/Fibonacci');
 
 function startRosConnection() {
 
@@ -70,7 +70,36 @@ function startRosConnection() {
     app.get('/action', async (req, res) => {
       const actionType = req.query.actionType; // Get action type from query parameter
       const actionName = req.query.actionName; // Get action name from query parameter
-      const goalData = req.query.goal ? JSON.parse(req.query.goal) : {}; // Parse goal from query parameter
+      const goalData = JSON.parse(req.query.goal) //  Parse goal from query parameter
+      
+      // const goalData = {
+      //   "order": 10
+      // };
+
+      // const goalData = {
+      //   "operation_type": "",
+      //   "target_group": "arm_joint",
+      //   "priority_list_state": 0,
+      //   "joint_a1": 0.01,
+      //   "joint_a2": 0.35,
+      //   "joint_a3": 0.44,
+      //   "joint_a4": 0.01,
+      //   "joint_a5": -0.62,
+      //   "joint_a6": 0.01,
+      //   "arm_group_pos_x": 0.0,
+      //   "arm_group_pos_y": 0.0,
+      //   "arm_group_pos_z": 0.0,
+      //   "arm_group_quat_x": 0.0,
+      //   "arm_group_quat_y": 0.0,
+      //   "arm_group_quat_z": 0.0,
+      //   "arm_group_quat_w": 0.0,
+      //   "tcp_offset_x": 0.0,
+      //   "tcp_offset_y": 0.0,
+      //   "tcp_offset_z": 0.0,
+      //   "retreat_distance_z": 0.0
+      // };
+
+      console.log(goalData);
     
       if (!actionType || !actionName) {
         res.status(400).send('Missing actionType or actionName query parameter.');
@@ -78,24 +107,13 @@ function startRosConnection() {
       }
     
       try {
-        const Fibonacci = rclnodejs.require(actionType); // Require the action message dynamically
         const _actionClient = new rclnodejs.ActionClient(rosNode, actionType, actionName);
     
         rosNode.getLogger().info('Waiting for action server...');
         await _actionClient.waitForServer();
-        
-        // Ensure that goalData is a valid number and assign it to the 'order' field
-        const goal = new Fibonacci.Goal();
-        goal.order = 10; // Ensure goalData is an integer (10 is the base for decimal)
-    
-        if (isNaN(goal.order)) {
-          rosNode.getLogger().error('Invalid goal data: "order" must be a number.');
-          res.status(400).send('Invalid goal data: "order" must be a number.');
-          return;
-        }
-    
+            
         rosNode.getLogger().info('Sending goal request...');
-        const goalHandle = await _actionClient.sendGoal(goal, (feedback) =>
+        const goalHandle = await _actionClient.sendGoal(goalData, (feedback) =>
           feedbackCallback2(rosNode, feedback)
         );
     
@@ -121,7 +139,7 @@ function startRosConnection() {
         res.status(500).send(error.message);
       }
     });
-    
+
 
     app.get('/parameter', async (req, res) => {
       const TargetNodeName = req.query.TargetNodeName; 
@@ -290,10 +308,10 @@ function setupWebSocket(server) {
 
 // ROS Topic Subscriber for /joint_states
 function subscribeToTopic(rosNode, topicName, messageType) {
-  console.log(`Subscribing to topic '${topicName}' with message type '${messageType}'...`);
+  // console.log(`Subscribing to topic '${topicName}' with message type '${messageType}'...`);
 
   rosNode.createSubscription(messageType, topicName, (message) => {
-    console.log(`Received message on '${topicName}':`, message);
+    // console.log(`Received message on '${topicName}':`, message);
 
     // Format data for WebSocket clients
     const formattedData = {

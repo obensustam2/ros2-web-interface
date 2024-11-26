@@ -108,9 +108,14 @@ export default {
         request: ''
       },
       action: {
-        actionName: 'fibonacci',
-        actionType: 'action_tutorials_interfaces/action/Fibonacci',
+        actionName: 'fibonacci', // fibonacci multi_group
+        actionType: 'action_tutorials_interfaces/action/Fibonacci', //  action_tutorials_interfaces/action/Fibonacci fanuc_msgs/action/MultiGroup
         goal: ''
+      /*
+        {
+          "order": 10
+        }
+      */
       }
     };
   },
@@ -129,7 +134,7 @@ export default {
 
       // Only handle messages from /joint_states
       if (data.topicName === '/joint_states') {
-        console.log('Received /joint_states message:', data);
+        // console.log('Received /joint_states message:', data);
 
         // Replace the jointStates array with the latest message
         this.jointStates = [{id: Date.now(), ...data,}]; // Unique ID for each message
@@ -142,7 +147,7 @@ export default {
     
       // Only handle messages from /rosout
       if (data.topicName === '/rosout') {
-        console.log('Received /rosout message:', data);
+        // console.log('Received /rosout message:', data);
 
         // Add the new message to the top of the list
         this.rosoutMessages.unshift({ id: Date.now(), ...data });
