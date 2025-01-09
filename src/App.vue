@@ -3,7 +3,7 @@
 </template>
   
 <script>
-  import RosWorld from './components/RosWorld.vue'
+  import RosWorld from './components/HelloTrial.vue'
   
   export default {
     name: 'App',
