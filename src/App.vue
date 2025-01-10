@@ -3,7 +3,7 @@
 </template>
   
 <script>
-  import RosWorld from './components/HelloTrial.vue'
+  import RosWorld from './components/RosWorld.vue'
   
   export default {
     name: 'App',
@@ -20,6 +20,5 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
   }
 </style>
