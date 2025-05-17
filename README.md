@@ -1,5 +1,5 @@
 # ROS2 Web Interface
-<img src="public/Default_UI.png" alt="Default UI" width="960"/>
+<img src="public/Default_UI.png" alt="Default UI" width="1440"/>
 
 ## Project Setup
 ```
@@ -27,6 +27,6 @@ python3 src/ros-scripts/service_server.py
 python3 src/ros-scripts/get_param.py
 ```
 
-<img src="public/Sample_Application.png" alt="Sample Application" width="960"/>
+<img src="public/Sample_Application.png" alt="Sample Application" width="1440"/>
 
 
