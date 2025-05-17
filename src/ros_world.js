@@ -76,29 +76,6 @@ function startRosConnection() {
       //   "order": 10
       // };
 
-      // const goalData = {
-      //   "operation_type": "",
-      //   "target_group": "arm_joint",
-      //   "priority_list_state": 0,
-      //   "joint_a1": 0.01,
-      //   "joint_a2": 0.35,
-      //   "joint_a3": 0.44,
-      //   "joint_a4": 0.01,
-      //   "joint_a5": -0.62,
-      //   "joint_a6": 0.01,
-      //   "arm_group_pos_x": 0.0,
-      //   "arm_group_pos_y": 0.0,
-      //   "arm_group_pos_z": 0.0,
-      //   "arm_group_quat_x": 0.0,
-      //   "arm_group_quat_y": 0.0,
-      //   "arm_group_quat_z": 0.0,
-      //   "arm_group_quat_w": 0.0,
-      //   "tcp_offset_x": 0.0,
-      //   "tcp_offset_y": 0.0,
-      //   "tcp_offset_z": 0.0,
-      //   "retreat_distance_z": 0.0
-      // };
-
       console.log(goalData);
     
       if (!actionType || !actionName) {

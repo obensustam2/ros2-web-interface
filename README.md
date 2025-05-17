@@ -1,25 +1,32 @@
 # ROS2 Web Interface
+<img src="public/Default_UI.png" alt="Default UI" width="960"/>
 
-## Project setup
+## Project Setup
 ```
-cd ~/ros2-web-interface/
+cd ros2-web-interface/
 npm install
-source RosSmartHand/install/setup.bash
+source /opt/ros/humble/setup.bash
 node node_modules/rclnodejs/scripts/generate_messages.js
 ```
 
-## Project launch 
+## Frontend and Backend Execution
 ```
 cd ros2-web-interface/
 npm run serve
-source RosSmartHand/install/setup.bash
+source /opt/ros/humble/setup.bash
 node src/ros_world.js
+```
+
+## Sample Application
+Desired topic, service, action, and parameter can be entered as an input.
+```
+source /opt/ros/humble/setup.bash
 ros2 topic echo /my_topic
 python3 src/ros-scripts/fibonacci_action_server.py
 python3 src/ros-scripts/service_server.py
 python3 src/ros-scripts/get_param.py
-ros2 launch fanuc_bringup fanuc_bringup.launch.py
 ```
 
-## ToDo
+<img src="public/Sample_Application.png" alt="Sample Application" width="960"/>
+
 

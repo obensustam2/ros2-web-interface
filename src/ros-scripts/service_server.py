@@ -4,7 +4,7 @@ from std_srvs.srv import Empty
 
 class MultiServiceServer(Node):
     def __init__(self):
-        super().__init__('multi_service_server')
+        super().__init__('service_server_node')
 
         self.get_logger().info('Service server initialized')
 

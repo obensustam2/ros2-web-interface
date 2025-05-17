@@ -2,18 +2,13 @@
 
   <!-- Header Section -->
   <div class="header-section">
-    <h1>{{ $t('title') }}</h1>
-
-    <!-- Language Toggle Button -->
-    <button @click="toggleLanguage" class="language-toggle-button">
-      <svg-icon type="mdi" :path="path_web"></svg-icon>
-    </button>
+    <h1>ROS 2 Web Interface</h1>
   </div>
 
   <div class="section">
-    <h2>{{ $t('rosStatus') }}</h2>
+    <h2>ROS Connection Status</h2>
     <p v-if="rosStatus !== null">
-      ROS Connection: <strong>{{ rosStatus ? $t('connected') : $t('disconnected') }}</strong>
+      ROS Connection: <strong>{{ rosStatus ? 'Connected' : 'Disconnected' }}</strong>
     </p>
 
     <div class="button-container">
@@ -42,14 +37,14 @@
       <input v-model="parameter.TargetNodeName" placeholder="Target Node Name" />
       <input v-model="parameter.ParameterName" placeholder="Parameter Name" />
       <input v-model="parameter.ParameterType" placeholder="Parameter Type" />
-      <input v-model="parameter.ParameterValue" placeholder="Parameter Value" />
+      <textarea v-model="parameter.ParameterValue" placeholder="Parameter Value"></textarea>
       <button @click="sendParameterUpdate" class="blue-button">Update Parameter</button>
     </div>
 
     <!-- Publish to Topic Section -->
     <div class="section">
       <h2>Publish to Topic</h2>
-      <input v-model="publish.topicName" placeholder="Topic Name (default: my_topic)" />
+      <input v-model="publish.topicName" placeholder="Topic Name" />
       <input v-model="publish.messageType" placeholder="Message Type" />
       <input v-model="publish.message" placeholder="Message" />
       <button @click="publishTopic" class="blue-button">Publish</button>
@@ -92,41 +87,33 @@
 
 
 <script>
-  import SvgIcon from '@jamescoyle/vue-icon'
-  import { mdiAccount, mdiWeb } from '@mdi/js'
 
   export default {
 
-    components: {
-      SvgIcon
-    },
-
     data() {
       return {
-        path_account: mdiAccount,
-        path_web: mdiWeb,
         jointStates: [], // Array to store received joint states
         rosoutMessages: [],
         rosStatus: null,
         parameter: {
-          TargetNodeName: 'fanuc_gripper_multi_group',
-          ParameterName: 'max_velocity_scaling_factor',
-          ParameterType: 'double',
-          ParameterValue: 0.5,
+          TargetNodeName: '',
+          ParameterName: '',
+          ParameterType: '',
+          ParameterValue: '',
         },
         publish: {
-          topicName: 'my_topic',
-          messageType: 'std_msgs/msg/String',
-          message: 'hello'
+          topicName: '',
+          messageType: '',
+          message: ''
         },
         service: {
-          serviceName: 'start',
-          serviceType: 'std_srvs/srv/Empty',
+          serviceName: '',
+          serviceType: '',
           request: ''
         },
         action: {
-          actionName: 'fibonacci', // fibonacci multi_group
-          actionType: 'action_tutorials_interfaces/action/Fibonacci', //  action_tutorials_interfaces/action/Fibonacci fanuc_msgs/action/MultiGroup
+          actionName: '',  
+          actionType: '', 
           goal: ''
         /*
           {
@@ -199,13 +186,7 @@
 
 
     methods: {
-      
-      toggleLanguage() {
-        // Toggle between English and French
-        const newLang = this.$i18n.locale === 'en' ? 'de' : 'en';
-        this.$i18n.locale = newLang;
-      },
-
+  
       async checkRosStatus() {
         try {
           const response = await fetch('http://localhost:3000/ros-status');
@@ -329,21 +310,6 @@
     justify-content: space-between;  /* Space between the title and button */
     align-items: center;             /* Vertically center the items */
     padding: 20px;
-  }
-
-  .language-toggle-button {
-    background: none;
-    border: none;
-    padding: 0;                      /* Remove padding to fit the 24px size */
-    cursor: pointer;
-    width: 30px;                     /* Set width */
-    height: 30px;                    /* Set height */
-  }
-
-  .language-toggle-button svg {
-    width: 100%;                     /* Ensure the SVG icon fits inside the button */
-    height: 100%;
-    color: black;
   }
 
   h1 {
